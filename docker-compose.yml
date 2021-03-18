@@ -1,0 +1,40 @@
+version: "3" 
+
+services: 
+  node:
+    container_name: node
+    image: gc/asks:latest 
+    command: npm start 
+    expose:
+      - 8080
+    ports:
+      - "8080:8080" 
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - backend
+
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: always
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_USER
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+    ports:
+      - 3000:3000
+    volumes: 
+      - db-config:/etc/mysql
+      - db-data:/var/lib/mysql
+    networks:
+      - backend
+
+volumes: 
+  db-config:
+  db-data:
+
+networks:
+  backend:
